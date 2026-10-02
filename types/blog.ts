@@ -1,0 +1,1 @@
+export type BlogPost = { id: string; title: string; slug: string; shortDescription: string; content: string; imageUrl: string; author: string; category: string; status: "active" | "draft"; featured: boolean; seoTitle: string; seoDescription: string; createdAt?: string | Date; updatedAt?: string | Date };

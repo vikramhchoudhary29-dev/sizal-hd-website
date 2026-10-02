@@ -1,0 +1,2 @@
+import EditProductForm from "@/components/admin/EditProductForm";
+export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; return <div><div className="mb-8"><h1 className="text-4xl font-black">Edit Product</h1><p className="mt-2 text-slate-500">Update product information.</p></div><div className="rounded-3xl border bg-white p-8 shadow-sm"><EditProductForm id={id}/></div></div>; }

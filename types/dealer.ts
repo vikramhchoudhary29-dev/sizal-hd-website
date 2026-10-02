@@ -1,0 +1,2 @@
+export type DealerStatus = "new" | "contacted" | "active" | "rejected";
+export type Dealer = { id: string; dealerName: string; shopName: string; ownerName: string; mobile: string; whatsapp: string; email: string; gstNumber: string; address: string; city: string; state: string; pincode: string; dealerType: string; existingBrands: string; monthlyPurchase: string; interestedProducts: string; salesRepresentative: string; status: DealerStatus; notes: string; createdAt?: string | Date; updatedAt?: string | Date };
