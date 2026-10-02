@@ -9,8 +9,6 @@ import {
   FileText,
   ShieldCheck,
   Sparkles,
-  Image as ImageIcon,
-  X,
   Zap,
 } from "lucide-react";
 import WebsiteNavbar from "@/components/website/WebsiteNavbar";
@@ -45,7 +43,7 @@ export default function ProductDetailsPage({
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [previewRow, setPreviewRow] = useState<NonNullable<Product["tableRows"]>[number] | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -249,11 +247,11 @@ export default function ProductDetailsPage({
 
               <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
                 <div className="overflow-x-auto">
-                  <table className="min-w-[920px] w-full border-collapse text-left">
+                  <table className="min-w-[930px] w-full border-collapse text-left">
                     <thead>
                       <tr className="bg-[#f4d65e] text-slate-950">
-                        <th className="w-24 px-5 py-4 text-sm font-black">Index</th>
-                        <th className="w-16 px-3 py-4 text-center text-sm font-black" aria-label="Product image" />
+                        <th className="w-[90px] px-5 py-4 text-sm font-black">Index</th>
+                        <th className="w-[92px] px-3 py-4 text-sm font-black">Preview</th>
                         <th className="px-5 py-4 text-sm font-black">Product Name</th>
                         <th className="px-5 py-4 text-sm font-black">Dia (mm)</th>
                         <th className="px-5 py-4 text-sm font-black">Coating Colour</th>
@@ -262,60 +260,55 @@ export default function ProductDetailsPage({
                     </thead>
                     <tbody>
                       {product.tableRows.map((row, index) => {
-                        const ranges = (row.description || "")
-                          .split(/[\s,;|]+/)
-                          .map((value) => value.trim())
-                          .filter(Boolean);
-
-                        const previewImage = product.coverImageUrl || product.imageUrl;
+                        const preview = product.coverImageUrl || product.imageUrl;
+                        const powerRanges = row.description
+                          ? row.description.match(/[+-]?\d+(?:\.\d{1,2})?\/[+-]?\d+(?:\.\d{1,2})?/g)
+                          : null;
 
                         return (
                           <tr
                             key={row.id || index}
                             className="border-t border-slate-200 align-top even:bg-slate-50"
                           >
-                            <td className="px-5 py-4 font-bold text-slate-800">
+                            <td className="px-5 py-5 font-bold text-slate-800">
                               {row.indexValue || "—"}
                             </td>
 
-                            <td className="px-3 py-4 text-center">
-                              {previewImage ? (
+                            <td className="px-3 py-4">
+                              {preview ? (
                                 <button
                                   type="button"
-                                  onClick={() => setPreviewRow(row)}
-                                  aria-label={`View image for ${row.productName || product.name}`}
-                                  title="View product image"
-                                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-400 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/15"
+                                  onClick={() => setPreviewImage(preview)}
+                                  className="group relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                                  aria-label={`Preview ${row.productName || product.name}`}
                                 >
-                                  <ImageIcon size={17} strokeWidth={2.2} />
+                                  <img
+                                    src={preview}
+                                    alt={row.productName || product.name}
+                                    className="h-full w-full object-contain p-1.5 transition duration-200 group-hover:scale-105"
+                                  />
                                 </button>
                               ) : (
-                                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-300">
-                                  <ImageIcon size={17} />
+                                <span className="flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-slate-300 text-xs font-semibold text-slate-400">
+                                  No image
                                 </span>
                               )}
                             </td>
 
-                            <td className="px-5 py-4 font-bold text-slate-800">
+                            <td className="px-5 py-5 font-bold text-slate-800">
                               {row.productName || product.name || "—"}
                             </td>
-                            <td className="px-5 py-4 text-slate-700">
-                              {row.dia || "—"}
-                            </td>
-                            <td className="px-5 py-4 text-slate-700">
-                              {row.coatingColour || "—"}
-                            </td>
-                            <td className="px-5 py-4 text-slate-700">
-                              {ranges.length > 0 ? (
-                                <div className="space-y-1.5 leading-6">
-                                  {ranges.map((range, rangeIndex) => (
-                                    <div key={`${range}-${rangeIndex}`} className="whitespace-nowrap">
-                                      {range}
-                                    </div>
+                            <td className="px-5 py-5 text-slate-700">{row.dia || "—"}</td>
+                            <td className="px-5 py-5 text-slate-700">{row.coatingColour || "—"}</td>
+                            <td className="px-5 py-5 text-slate-700">
+                              {powerRanges && powerRanges.length > 0 ? (
+                                <div className="space-y-2 whitespace-nowrap">
+                                  {powerRanges.map((range, rangeIndex) => (
+                                    <div key={`${range}-${rangeIndex}`}>{range}</div>
                                   ))}
                                 </div>
                               ) : (
-                                "—"
+                                <div className="whitespace-pre-line">{row.description || "—"}</div>
                               )}
                             </td>
                           </tr>
@@ -325,45 +318,37 @@ export default function ProductDetailsPage({
                   </table>
                 </div>
               </div>
+
+              {previewImage && (
+                <div
+                  className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/75 p-5 backdrop-blur-sm"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label="Product image preview"
+                  onClick={() => setPreviewImage(null)}
+                >
+                  <div
+                    className="relative max-h-[90vh] max-w-[92vw] overflow-hidden rounded-3xl bg-white p-3 shadow-2xl"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setPreviewImage(null)}
+                      className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-950/80 text-xl font-bold text-white transition hover:bg-slate-950"
+                      aria-label="Close image preview"
+                    >
+                      ×
+                    </button>
+                    <img
+                      src={previewImage}
+                      alt={`${product.name} preview`}
+                      className="max-h-[84vh] max-w-[88vw] rounded-2xl object-contain"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </section>
-        )}
-
-        {previewRow && (
-          <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/75 p-5 backdrop-blur-sm"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Product image preview"
-            onMouseDown={(event) => {
-              if (event.target === event.currentTarget) {
-                setPreviewRow(null);
-              }
-            }}
-          >
-            <div className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-[1.5rem] border border-white/15 bg-white p-3 shadow-2xl">
-              <button
-                type="button"
-                onClick={() => setPreviewRow(null)}
-                aria-label="Close image preview"
-                className="absolute right-4 top-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-950/80 text-white shadow-lg transition hover:bg-slate-950 focus:outline-none focus:ring-4 focus:ring-white/30"
-              >
-                <X size={20} />
-              </button>
-
-              <div className="flex max-h-[84vh] items-center justify-center rounded-[1.1rem] bg-slate-100 p-4">
-                <img
-                  src={product.coverImageUrl || product.imageUrl || ""}
-                  alt={previewRow.productName || product.name || "Product image"}
-                  className="max-h-[80vh] max-w-full object-contain"
-                />
-              </div>
-
-              <p className="px-3 pb-2 pt-4 text-center text-sm font-bold text-slate-700">
-                {previewRow.productName || product.name}
-              </p>
-            </div>
-          </div>
         )}
 
         <section className="px-5 py-24 md:px-12 md:py-28 lg:px-16">
