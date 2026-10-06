@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+:root {
+  --sizal-blue: #0057ff;
+  --sizal-cyan: #00c8ff;
+  --sizal-emerald: #00b894;
+  --sizal-dark: #07131e;
+  --sizal-bg: #f8fbff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--sizal-bg);
+  color: var(--sizal-dark);
+  font-family: Inter, Manrope, Arial, Helvetica, sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(0, 87, 255, 0.18);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes floatLens {
+  0%, 100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-22px) rotate(2deg);
+  }
+}
+
+@keyframes shine {
+  0%, 100% {
+    transform: translateX(-55px) rotate(28deg);
+    opacity: 0.32;
+  }
+  50% {
+    transform: translateX(95px) rotate(28deg);
+    opacity: 0.78;
+  }
+}
+
+@keyframes slowSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float-lens {
+  animation: floatLens 5s ease-in-out infinite;
+}
+
+.animate-shine {
+  animation: shine 4s ease-in-out infinite;
+}
+
+.animate-slow-spin {
+  animation: slowSpin 14s linear infinite;
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.8s ease both;
+}
+@keyframes loginFade {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes softGlow {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(18px) scale(1.08);
+  }
+}
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(26px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes heroFadeScale {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+/* Responsive foundation */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+@media (max-width: 639px) {
+  .mobile-safe-padding {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.blog-article-content { color: #334155; font-size: 1.08rem; line-height: 1.9; }
+.blog-article-content p { margin: 0 0 1.35rem; }
+.blog-article-content h2 { margin: 2.5rem 0 1rem; color: #0f172a; font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.2; font-weight: 900; }
+.blog-article-content h3 { margin: 2rem 0 .8rem; color: #0f172a; font-size: 1.5rem; line-height: 1.25; font-weight: 900; }
+.blog-article-content a { color: #2563eb; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.blog-article-content ul, .blog-article-content ol { margin: 1rem 0 1.5rem; padding-left: 1.5rem; }
+.blog-article-content ul { list-style: disc; }
+.blog-article-content ol { list-style: decimal; }
+.blog-article-content li { margin: .45rem 0; }
+.blog-article-content blockquote { margin: 1.8rem 0; border-left: 4px solid #2563eb; border-radius: 0 .8rem .8rem 0; background: #eff6ff; padding: 1rem 1.2rem; font-style: italic; color: #1e3a8a; }
+.blog-article-content img { display: block; max-width: 100%; height: auto; margin: 1.8rem auto; border-radius: 1rem; }
+.blog-article-content hr { margin: 2rem 0; border: 0; border-top: 1px solid #e2e8f0; }

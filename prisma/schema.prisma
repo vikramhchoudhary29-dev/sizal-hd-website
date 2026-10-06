@@ -1,0 +1,262 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ProductStatus {
+  active
+  draft
+}
+enum CategoryStatus {
+  active
+  draft
+}
+enum BlogStatus {
+  active
+  draft
+}
+enum DownloadStatus {
+  active
+  draft
+}
+enum GalleryStatus {
+  active
+  draft
+}
+
+enum GalleryMediaType {
+  image
+  video
+}
+enum DealerStatus {
+  new
+  contacted
+  active
+  rejected
+}
+enum AdminRole {
+  owner
+  super_admin
+  admin
+  editor
+}
+enum AdminStatus {
+  active
+  disabled
+}
+
+model Product {
+  id               String        @id @default(cuid())
+  name             String
+  code             String
+  category         String        @default("")
+  shortDescription String        @default("")
+  fullDescription  String        @default("")
+  lensIndex        String        @default("")
+  coating          String        @default("")
+  imageUrl         String        @default("")
+  coverImageUrl    String        @default("")
+  videoUrl         String        @default("")
+  pdfUrl           String        @default("")
+  status           ProductStatus @default(active)
+  featured         Boolean       @default(false)
+  seoTitle         String        @default("")
+  seoDescription   String        @default("")
+  tableRows        ProductTableRow[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+}
+
+model ProductTableRow {
+  id            String  @id @default(cuid())
+  productId     String
+  indexValue    String  @default("")
+  productName   String  @default("")
+  dia           String  @default("")
+  coatingColour String  @default("")
+  description   String  @default("")
+  displayOrder  Int     @default(0)
+  product       Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([productId, displayOrder])
+}
+
+model Category {
+  id          String         @id @default(cuid())
+  name        String
+  slug        String         @unique
+  description String         @default("")
+  status      CategoryStatus @default(active)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Dealer {
+  id                 String       @id @default(cuid())
+  dealerName         String
+  shopName           String
+  ownerName          String       @default("")
+  mobile             String
+  whatsapp           String       @default("")
+  email              String       @default("")
+  gstNumber          String       @default("")
+  address            String       @default("")
+  city               String       @default("")
+  state              String       @default("")
+  pincode            String       @default("")
+  dealerType         String       @default("")
+  existingBrands     String       @default("")
+  monthlyPurchase   String       @default("")
+  interestedProducts String       @default("")
+  salesRepresentative String      @default("")
+  status             DealerStatus @default(new)
+  notes              String       @default("")
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model BlogPost {
+  id              String     @id @default(cuid())
+  title           String
+  slug            String     @unique
+  shortDescription String    @default("")
+  content         String     @default("")
+  imageUrl        String     @default("")
+  author          String     @default("")
+  category        String     @default("")
+  status          BlogStatus @default(active)
+  featured        Boolean    @default(false)
+  seoTitle        String     @default("")
+  seoDescription  String     @default("")
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Download {
+  id        String         @id @default(cuid())
+  title     String
+  type      String         @default("")
+  category  String         @default("")
+  fileUrl   String         @default("")
+  status    DownloadStatus @default(active)
+  featured  Boolean        @default(false)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model GalleryItem {
+  id           String         @id @default(cuid())
+  title        String
+  category     String         @default("")
+  description  String         @default("")
+  imageUrl     String         @default("")
+ mediaType     GalleryMediaType @default(image)
+  displayOrder Int            @default(0)
+  status       GalleryStatus  @default(active)
+  featured     Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  categoryId   String?
+  galleryCategory GalleryCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([displayOrder])
+  @@index([createdAt])
+  @@index([categoryId])
+}
+
+model GalleryCategory {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  description String        @default("")
+  status      GalleryStatus @default(active)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  items       GalleryItem[]
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model WebsiteSettings {
+  id                    String   @id
+  heroTitle             String   @default("")
+  heroHighlight         String   @default("")
+  heroSubtitle          String   @default("")
+
+  primaryButtonText     String   @default("")
+  primaryButtonUrl      String   @default("")
+
+  secondaryButtonText   String   @default("")
+  secondaryButtonUrl    String   @default("")
+
+  galleryHeroTitle      String   @default("")
+  galleryHeroHighlight  String   @default("")
+  galleryHeroSubtitle   String   @default("")
+
+  companyPhone          String   @default("")
+  whatsappNumber        String   @default("")
+  companyEmail          String   @default("")
+  companyAddress        String   @default("")
+
+  instagramUrl          String   @default("")
+  facebookUrl            String   @default("")
+  whatsappUrl           String   @default("")
+
+  seoTitle              String   @default("")
+  seoDescription        String   @default("")
+
+  updatedAt             DateTime @updatedAt
+}
+
+model Admin {
+  uid        String      @id
+  name       String
+  email      String      @unique
+  role       AdminRole   @default(admin)
+  status     AdminStatus @default(active)
+  createdBy  String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([role])
+  @@index([status])
+}
+
+model ActivityLog {
+  id               String   @id @default(cuid())
+  action           String
+  message          String
+  performedBy      String
+  performedByEmail String
+  targetUid        String?
+  targetEmail      String?
+  createdAt        DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([action])
+  @@index([performedBy])
+}

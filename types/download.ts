@@ -1,0 +1,1 @@
+export type DownloadItem = { id: string; title: string; type: string; category: string; fileUrl: string; status: "active" | "draft"; featured: boolean; createdAt?: string | Date; updatedAt?: string | Date };

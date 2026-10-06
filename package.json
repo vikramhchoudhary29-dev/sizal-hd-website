@@ -1,0 +1,57 @@
+{
+  "name": "sizal-hd-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate-firestore": "tsx scripts/migrate-firestore-to-neon.ts",
+    "postinstall": "prisma generate",
+    "db:keep-one-product": "tsx scripts/keep-one-product.ts",
+    "db:set-owner-email": "tsx scripts/set-owner-email.ts",
+    "setup:firebase-admin": "node scripts/setup-firebase-admin-env.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@tailwindcss/postcss": "latest",
+    "firebase": "^12.15.0",
+    "firebase-admin": "13.10.0",
+    "xlsx": "^0.18.5",
+    "framer-motion": "latest",
+    "gsap": "latest",
+    "lenis": "latest",
+    "lucide-react": "^1.21.0",
+    "next": "latest",
+    "react": "latest",
+    "react-countup": "^6.5.3",
+    "react-dom": "latest",
+    "sonner": "^2.0.7",
+    "three": "^0.185.0"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "prisma": "^6.19.3",
+    "tailwindcss": "latest",
+    "tsx": "^4.20.3",
+    "typescript": "latest"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "overrides": {
+    "jwks-rsa": {
+      "jose": "5.10.0"
+    }
+  }
+}
